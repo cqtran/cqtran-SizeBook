@@ -55,7 +55,7 @@ public class cqtranSizeBook extends AppCompatActivity {
     private TextView numOfRecords;
 
     /**
-     * At records.setOnItemClickListener
+     * At records.setOnItemClickListener able to select item from listview.
      * When a record is selected on the list, already stored values
      * are loaded into the edittext view.
      * @param savedInstanceState
@@ -98,6 +98,19 @@ public class cqtranSizeBook extends AppCompatActivity {
         });
     }
 
+    /**
+     * Replaces 0.0 value with "" so it doesn't fill
+     * up all the edittext fields.
+     * @param string
+     * @return
+     */
+    public String cleanup(String string) {
+        if (string.equals("0.0")) {
+            return "";
+        } else {
+            return string;
+        }
+    }
     /**
      * the onClick function when add is clicked.
      * adds a record to the list.
@@ -170,7 +183,7 @@ public class cqtranSizeBook extends AppCompatActivity {
         catch (IndexOutOfBoundsException e) {
         }
     }
-    
+
     /**
      * Takes text user inputs and converts into a Double.
      * @param entry the userinput
@@ -185,22 +198,6 @@ public class cqtranSizeBook extends AppCompatActivity {
         }
         return part;
     }
-
-    /**
-     * Replaces 0.0 value with "" so it doesn't fill
-     * up all the edittext fields.
-     * @param string
-     * @return
-     */
-    public String cleanup(String string) {
-        if (string.equals("0.0")) {
-            return "";
-        } else {
-            return string;
-        }
-    }
-
-
 
     //taken from lonelyTwitter from lab 301.
 
