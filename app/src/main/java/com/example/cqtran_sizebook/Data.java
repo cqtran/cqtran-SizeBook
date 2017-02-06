@@ -22,6 +22,18 @@ public class Data{
     private Double inseam;
     private String comment;
 
+    /**
+     *
+     * @param name Name
+     * @param date date in yyyy-mm-dd format
+     * @param neck neck measurement in inches
+     * @param bust bust measurement in inches
+     * @param chest chest measurement in inches
+     * @param waist waist measurement in inches
+     * @param hip hip measurement in inches
+     * @param inseam inseam measurement in inches
+     * @param comment any comments user may have
+     */
     public Data(String name, String date, Double neck, Double bust, Double chest, Double waist,
                        Double hip, Double inseam, String comment) {
         this.name = name;
@@ -35,7 +47,10 @@ public class Data{
         this.comment = comment;
     }
 
-
+    /**
+     * getters for Data
+     * @return
+     */
     public String getName() {
         return name;
     }
@@ -62,6 +77,12 @@ public class Data{
         return comment;
     }
 
+    /**
+     * Returns string to display in listview.
+     * only uses name, bust, chest, waist, and inseam values because
+     * of space restrictions.
+     * @return string used in listview
+     */
     @Override
     public String toString() {
         // because not alot of space only name, bust, chest, waist, inseam values are shown

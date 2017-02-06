@@ -12,14 +12,12 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -56,19 +54,16 @@ public class cqtranSizeBook extends AppCompatActivity {
     private EditText editComment;
     private TextView numOfRecords;
 
+    /**
+     * At records.setOnItemClickListener
+     * When a record is selected on the list, already stored values
+     * are loaded into the edittext view.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cqtran_size_book);
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        recordList = new ArrayList<Data>();
-        records = (ListView) findViewById(R.id.listview);
-        numOfRecords = (TextView) findViewById(R.id.numofrecords);
-
-        Button addBtn = (Button) findViewById(R.id.add);
-        Button editBtn = (Button) findViewById(R.id.edit);
-        Button delBtn = (Button) findViewById(R.id.delete);
 
         editName = (EditText) findViewById(R.id.name);
         editDate = (EditText) findViewById(R.id.date);
@@ -80,6 +75,9 @@ public class cqtranSizeBook extends AppCompatActivity {
         editInseam = (EditText) findViewById(R.id.inseam);
         editComment = (EditText) findViewById(R.id.comment);
 
+        recordList = new ArrayList<Data>();
+        records = (ListView) findViewById(R.id.listview);
+        numOfRecords = (TextView) findViewById(R.id.numofrecords);
 
         records.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,10 +97,17 @@ public class cqtranSizeBook extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * the onClick function when add is clicked.
+     * adds a record to the list.
+     * @param v view for add button
+     */
     public void addButton(View v){
                 Button addBtn = (Button) findViewById(R.id.add);
                 String name = editName.getText().toString();
                 String date = editDate.getText().toString();
+
                 Double neck = parseDouble(editNeck);
                 Double bust = parseDouble(editBust);
                 Double chest = parseDouble(editChest);
@@ -110,6 +115,7 @@ public class cqtranSizeBook extends AppCompatActivity {
                 Double hip = parseDouble(editHip);
                 Double inseam = parseDouble(editInseam);
                 String comment = editComment.getText().toString();
+
                 Data newEntry = new Data(name, date, neck, bust, chest, waist, hip, inseam, comment);
                 recordList.add(newEntry);
                 numOfRecords.setText(getString(R.string.counter,recordList.size()));
@@ -117,11 +123,18 @@ public class cqtranSizeBook extends AppCompatActivity {
                 saveInFile();
             }
 
+    /**
+     * Edits a current record.
+     * Has an IndexOutOfBoundsException so app won't crash
+     * when edit is pressed and there are no records.
+     * @param vv view for edit button
+     */
     public void editButton(View vv){
         try {
             Button editBtn = (Button) findViewById(R.id.edit);
             String name = editName.getText().toString();
             String date = editDate.getText().toString();
+
             Double neck = parseDouble(editNeck);
             Double bust = parseDouble(editBust);
             Double chest = parseDouble(editChest);
@@ -129,6 +142,7 @@ public class cqtranSizeBook extends AppCompatActivity {
             Double hip = parseDouble(editHip);
             Double inseam = parseDouble(editInseam);
             String comment = editComment.getText().toString();
+
             Data newEntry = new Data(name, date, neck, bust, chest, waist, hip, inseam, comment);
             recordList.set(position, newEntry);
             adapter.notifyDataSetChanged();
@@ -139,6 +153,12 @@ public class cqtranSizeBook extends AppCompatActivity {
         }
     }
 
+    /**
+     * Deletes a record by removing the it from the list.
+     * Has an IndexOutOfBoundsException so app won't crash when delete is pressed
+     * and there are no records.
+     * @param vvv view for delete button
+     */
     public void deleteButton(View vvv){
         Button delBtn = (Button) findViewById(R.id.delete);
         try {
@@ -150,15 +170,12 @@ public class cqtranSizeBook extends AppCompatActivity {
         catch (IndexOutOfBoundsException e) {
         }
     }
-
-    public String cleanup(String string) {
-        if (string.equals("0.0")) {
-            return "";
-        } else {
-            return string;
-        }
-    }
-
+    
+    /**
+     * Takes text user inputs and converts into a Double.
+     * @param entry the userinput
+     * @return
+     */
     public Double parseDouble(EditText entry) {
         Double part;
         try {
@@ -169,6 +186,24 @@ public class cqtranSizeBook extends AppCompatActivity {
         return part;
     }
 
+    /**
+     * Replaces 0.0 value with "" so it doesn't fill
+     * up all the edittext fields.
+     * @param string
+     * @return
+     */
+    public String cleanup(String string) {
+        if (string.equals("0.0")) {
+            return "";
+        } else {
+            return string;
+        }
+    }
+
+
+
+    //taken from lonelyTwitter from lab 301.
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -177,6 +212,7 @@ public class cqtranSizeBook extends AppCompatActivity {
         records.setAdapter(adapter);
         numOfRecords.setText(getString(R.string.counter,recordList.size()));
     }
+
 
     private void loadFromFile() {
         try {
