@@ -112,7 +112,7 @@
         android:id="@+id/name"
         android:layout_alignBottom="@+id/textView15"
         android:layout_alignParentEnd="true"
-        android:hint="Enter name " />
+        android:hint="REQUIRED" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -203,7 +203,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/delete"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="deleteButton"/>
 
     <ListView
         android:layout_width="match_parent"
@@ -229,7 +230,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/add"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/edit" />
+        android:layout_toStartOf="@+id/edit"
+        android:onClick="addButton" />
 
     <Button
         android:text="Edit"
@@ -237,5 +239,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/edit"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/delete" />
+        android:layout_toStartOf="@+id/delete"
+        android:onClick="editButton"/>
 </RelativeLayout>

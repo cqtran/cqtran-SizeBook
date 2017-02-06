@@ -9,7 +9,6 @@
 package com.example.cqtran_sizebook;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,9 +38,13 @@ import java.util.ArrayList;
 public class cqtranSizeBook extends AppCompatActivity {
 
     private static final String FILENAME = "file.sav";
+
     private ListView records;
     private int position;
     private ArrayList<Data> recordList;
+    private ArrayAdapter<Data> adapter;
+    private ArrayList<Data> pullList = new ArrayList<Data>();
+
     private EditText editName;
     private EditText editDate;
     private EditText editNeck;
@@ -52,8 +55,6 @@ public class cqtranSizeBook extends AppCompatActivity {
     private EditText editInseam;
     private EditText editComment;
     private TextView numOfRecords;
-    private ArrayAdapter<Data> adapter;
-    private ArrayList<Data> pullList = new ArrayList<Data>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +64,12 @@ public class cqtranSizeBook extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         recordList = new ArrayList<Data>();
         records = (ListView) findViewById(R.id.listview);
-        Button addButton = (Button) findViewById(R.id.add);
-        Button deleteButton = (Button) findViewById(R.id.delete);
-        Button editButton = (Button) findViewById(R.id.edit);
         numOfRecords = (TextView) findViewById(R.id.numofrecords);
+
+        Button addBtn = (Button) findViewById(R.id.add);
+        Button editBtn = (Button) findViewById(R.id.edit);
+        Button delBtn = (Button) findViewById(R.id.delete);
+
         editName = (EditText) findViewById(R.id.name);
         editDate = (EditText) findViewById(R.id.date);
         editNeck = (EditText) findViewById(R.id.neck);
@@ -76,12 +79,28 @@ public class cqtranSizeBook extends AppCompatActivity {
         editHip = (EditText) findViewById(R.id.hip);
         editInseam = (EditText) findViewById(R.id.inseam);
         editComment = (EditText) findViewById(R.id.comment);
-        Resources res = getResources();
-        Toast.makeText(cqtranSizeBook.this,"Please enter your details. Fields are optional except for name",Toast.LENGTH_LONG).show();
 
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        records.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                position = pos;
+                pullList.clear();
+                pullList.add(adapter.getItem(position));
+                editName.setText(recordList.get(position).getName());
+                editDate.setText(recordList.get(position).getDate());
+                editNeck.setText(cleanup(recordList.get(position).getNeck()));
+                editBust.setText(cleanup(recordList.get(position).getBust()));
+                editChest.setText(cleanup(recordList.get(position).getChest()));
+                editWaist.setText(cleanup(recordList.get(position).getWaist()));
+                editHip.setText(cleanup(recordList.get(position).getHip()));
+                editInseam.setText(cleanup(recordList.get(position).getInseam()));
+                editComment.setText(recordList.get(position).getComment());
+            }
+        });
+    }
+    public void addButton(View v){
+                Button addBtn = (Button) findViewById(R.id.add);
                 String name = editName.getText().toString();
                 String date = editDate.getText().toString();
                 Double neck = parseDouble(editNeck);
@@ -97,66 +116,48 @@ public class cqtranSizeBook extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 saveInFile();
             }
-        });
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = editName.getText().toString();
-                String date = editDate.getText().toString();
-                Double neck = parseDouble(editNeck);
-                Double bust = parseDouble(editBust);
-                Double chest = parseDouble(editChest);
-                Double waist = parseDouble(editWaist);
-                Double hip = parseDouble(editHip);
-                Double inseam = parseDouble(editInseam);
-                String comment = editComment.getText().toString();
-                Data newEntry = new Data(name, date, neck, bust, chest, waist, hip, inseam, comment);
-                recordList.set(position, newEntry);
-                adapter.notifyDataSetChanged();
-                saveInFile();
-            }
 
-        });
+    public void editButton(View vv){
+        try {
+            Button editBtn = (Button) findViewById(R.id.edit);
+            String name = editName.getText().toString();
+            String date = editDate.getText().toString();
+            Double neck = parseDouble(editNeck);
+            Double bust = parseDouble(editBust);
+            Double chest = parseDouble(editChest);
+            Double waist = parseDouble(editWaist);
+            Double hip = parseDouble(editHip);
+            Double inseam = parseDouble(editInseam);
+            String comment = editComment.getText().toString();
+            Data newEntry = new Data(name, date, neck, bust, chest, waist, hip, inseam, comment);
+            recordList.set(position, newEntry);
+            adapter.notifyDataSetChanged();
+            saveInFile();
+        }
+        catch (IndexOutOfBoundsException ee) {
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    recordList.remove(position);
-                    Data newEntry = new Data("", "", Double.parseDouble("0"),
-                            Double.parseDouble("0"), Double.parseDouble("0"), Double.parseDouble("0"),
-                            Double.parseDouble("0"), Double.parseDouble("0"), "");
-                    numOfRecords.setText(getString(R.string.counter, recordList.size()));
-                    adapter.notifyDataSetChanged();
-                    saveInFile();
-                }
-                catch (IndexOutOfBoundsException e) {
-                    Toast.makeText(cqtranSizeBook.this, "Please click on entry before deleting",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-
-        records.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                position = pos;
-                pullList.clear();
-                pullList.add(adapter.getItem(position));
-                editName.setText(recordList.get(position).getName());
-                editDate.setText(recordList.get(position).getDate());
-                editNeck.setText(recordList.get(position).getNeck());
-                editBust.setText(recordList.get(position).getBust());
-                editChest.setText(recordList.get(position).getChest());
-                editWaist.setText(recordList.get(position).getWaist());
-                editHip.setText(recordList.get(position).getHip());
-                editInseam.setText((recordList.get(position).getInseam()));
-                editComment.setText(recordList.get(position).getComment());
-            }
-        });
+        }
     }
 
+    public void deleteButton(View vvv){
+        Button delBtn = (Button) findViewById(R.id.delete);
+        try {
+            recordList.remove(position);
+            numOfRecords.setText(getString(R.string.counter, recordList.size()));
+            adapter.notifyDataSetChanged();
+            saveInFile();
+        }
+        catch (IndexOutOfBoundsException e) {
+        }
+    }
+
+    public String cleanup(String string) {
+        if (string.equals("0.0")) {
+            return "";
+        } else {
+            return string;
+        }
+    }
 
     public Double parseDouble(EditText entry) {
         Double part;
