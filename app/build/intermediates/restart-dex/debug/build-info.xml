@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="x86"
+    api-level="18"
+    density="xxhdpi"
+    format="8"
+    plugin-version="2.2.3"
+    timestamp="189796279421922"
+    token="-8066136142755283133"
+    verifier="FULL_BUILD_REQUESTED" >
+
+    <task
+        name="javac"
+        duration="1359" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="442" />
+    <task
+        name="verifier"
+        duration="23" />
+
+    <artifact
+        location="/Users/Cameron/Documents/Android/cqtran-SizeBook/app/build/outputs/apk/app-debug.apk"
+        type="MAIN" />
+
+    <build
+        timestamp="189796279421922"
+        verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="/Users/Cameron/Documents/Android/cqtran-SizeBook/app/build/outputs/apk/app-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>
